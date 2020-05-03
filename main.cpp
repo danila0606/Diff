@@ -4,7 +4,7 @@
 int main() {
 
     try {
-        istringstream str("sin(x)");
+        istringstream str("sin(x+2)");
         Node *expression = Read_str_to_tree(str, 0);
         tree_print(expression);
         cout <<endl;

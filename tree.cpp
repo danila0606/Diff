@@ -345,6 +345,7 @@ Node* MakeFuncNode(istringstream &in, const double& func) {
     SpaceSkipper(in);
     Node *nodeempt = new Node(ValueType::_empty, 0);
     Node *funcnode = new Node(ValueType::_function, func, nodeempt, Read_str_to_tree(in, 0), true);
+    funcnode->right->in_word = true;
 
     char next_symbol = in.peek();
     double operation;
