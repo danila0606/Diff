@@ -26,6 +26,9 @@ Node::Node(ValueType type, double value, Node *left_, Node *right_, bool in) {
     right = right_;
     in_word = in;
 }
+Node::~Node() {
+    tree_destroy(this);
+}
 Node* CopyNode(const Node* node) {
     Node *copy_node = new Node (node->Type, node->val);
     copy_node->in_word = node->in_word;
@@ -423,7 +426,7 @@ Node* Read_str_to_tree(istringstream &in, int t) {
 }
 void CountVal(Node *node, const double &value) {
     double ans = TreeCount(node, value);
-    if (abs(ans / 10000000) < 0.0000001)
+    if (abs(ans) < 0.000001)
         cout << 0;
     else cout<<ans;
 }

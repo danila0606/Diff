@@ -4,7 +4,7 @@
 int main() {
 
     try {
-        istringstream str("sin(x+2)");
+        istringstream str("(x^2)/2");
         Node *expression = Read_str_to_tree(str, 0);
         tree_print(expression);
         cout <<endl;
@@ -13,12 +13,13 @@ int main() {
         tree_print(derivative);
         cout <<endl;
 
-        CountVal(derivative, 2);
+        CountVal(derivative, 0.000009);
 
     } catch (exception &e) {
         cerr << e.what()<<endl;
         exit(1);
     }
+
     
     return 0;
 }

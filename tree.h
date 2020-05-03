@@ -40,6 +40,7 @@ public:
     explicit Node(Node *tree);
     explicit Node(ValueType type, double value);
     explicit Node(ValueType type, double value, Node *left_, Node *right_, bool in);
+    ~Node();
 private:
     double val;
     ValueType Type;
