@@ -49,7 +49,7 @@ private:
     bool in_word;
     int height;
 
-    friend Node* Read_str_to_tree(istringstream& in, int t);
+    friend Node* Read_str_to_tree(istringstream& in, int t, int notation);
     friend void tree_print (Node * tree);
 
     friend Node* MakeUnarMinus (istringstream &in);
@@ -60,11 +60,11 @@ private:
     friend bool SearchFunction (istringstream &in, double &func);
     friend Node* MakeFuncNode(istringstream &in, const double& func);
     friend Node* Diff(const Node * tree);
-    friend double TreeCount (Node* node, const double& value);
+    friend double TreeCount (Node* node, const double& value, int notat);
     friend Node* CopyNode(const Node* node);
-    friend void CountVal(Node *node, const double &value);
+    friend void CountVal(Node *node, const double &value, int notat);
 };
-Node * Read_str_to_tree(istringstream& in, int t);
+Node * Read_str_to_tree(istringstream& in, int t, int notation = 10);
 void tree_print (Node * tree);
 char OperationFind(const double& val);
 bool my_isdigit(istringstream &str, double &digit);
@@ -76,7 +76,7 @@ int tree_height(Node * tree);
 bool SearchFunction (istringstream &in, double &func);
 Node* MakeFuncNode(istringstream &in, const double& func);
 char* Makestr(const char& c);
-double TreeCount (Node* node, const double& value);
+double TreeCount (Node* node, const double& value, int notat = 10);
 Node* Diff(const Node * tree);
 Node* CopyNode(const Node* node);
-void CountVal(Node *node, const double &value);
+void CountVal(Node *node, const double &value, int notat = 10);

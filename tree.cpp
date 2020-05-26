@@ -1,6 +1,7 @@
 #include "tree.h"
 
 using namespace std;
+int Notation = 10;
 
 Node::Node() {
     val = EMPTY;
@@ -166,7 +167,7 @@ double SearchOperation (istringstream& str) {
 }
 
 bool my_isdigit(istringstream &str, double &digit) {
-
+    char notat ='0' + Notation;
     char c = str.peek();
     digit = 0.0;
     char digit_str[10];
@@ -181,29 +182,26 @@ bool my_isdigit(istringstream &str, double &digit) {
         }
         else throw invalid_argument("invalid symbol " + string(Makestr(c)));
     }
-    if (isdigit(c) && c != EOF) {
+    if ((c >= '0' && c < notat) && c != EOF) {
         for (i = 0; c != EOF; c = str.peek()) {
-            if (c == '.' && k == false) {
-                digit_str[i++] = c;
-                str.ignore(1);
-                k = true;
-            }
-            else if (isdigit(c) != 0 ) {
+            if (c >= '0' && c < notat) {
                 digit_str[i++] = c;
                 str.ignore(1);
             } else {
                 digit_str[i] = '\0';
-                digit = atof(digit_str);
+                digit = (double)strtol(digit_str, NULL, Notation);
                 return true;
             }
         }
         digit_str[i] = '\0';
-        digit = atof(digit_str);
+
+        digit = (double)strtol(digit_str, NULL, Notation);
         return true;
     }
     else
         return false;
 }
+
 void SpaceSkipper (istringstream& str) {
     while (str.peek() == ' ')
         str.ignore(1);
@@ -366,7 +364,10 @@ Node* MakeFuncNode(istringstream &in, const double& func) {
     }
     throw invalid_argument("invalid symbol " + string(Makestr(next_symbol)));
 }
-Node* Read_str_to_tree(istringstream &in, int t) {
+Node* Read_str_to_tree(istringstream &in, int t, int notation) {
+    if (notation != 10) {
+        Notation = notation;
+    }
     double operation, digit, function = 0;
     SpaceSkipper(in);
     char next_symbol = in.peek();
@@ -423,43 +424,59 @@ Node* Read_str_to_tree(istringstream &in, int t) {
         throw invalid_argument("invalid symbol " + string(Makestr(next_symbol)));
     }
 
+    return nullptr;
 }
-void CountVal(Node *node, const double &value) {
-    double ans = TreeCount(node, value);
+void CountVal(Node *node, const double &value, int notat) {
+    double ans = TreeCount(node, value, notat);
     if (abs(ans) < 0.000001)
         cout << 0;
-    else cout<<ans;
+    if (notat == 8)
+        cout<<oct<<ans;
+    else
+        cout<<ans;
 }
-double TreeCount (Node* node, const double& value) {
+double TreeCount (Node* node, const double& value, int notat) {
     switch (node->Type) {
         case (ValueType::_operation) : {
+
             switch (int(node->val)) {
                 case (int(ADD)) :
                     return TreeCount(node->left, value) + TreeCount(node->right, value);
+                    break;
                 case (int(SUB)) :
                     return TreeCount(node->left, value) - TreeCount(node->right, value);
+                    break;
                 case (int(MUL)) :
                     return TreeCount(node->left, value) * TreeCount(node->right, value);
+                    break;
                 case (int(DIV)) :
                     return TreeCount(node->left, value) / TreeCount(node->right, value);
+                    break;
                 case (int(POW)) :
                     return pow(TreeCount(node->left, value), TreeCount(node->right, value));
+                    break;
             }
         }
-        case (ValueType::_number) : { return node->val; }
-        case (ValueType::_empty)  : { return 0; }
+        case (ValueType::_number) : { return node->val; break; }
+        case (ValueType::_empty)  : { return 0; break;}
         case (ValueType::_function) : {
             switch(int(node->val)) {
                 case (int(SIN)) : return sin(TreeCount(node->right, value));
+                    break;
                 case (int(COS)) : return cos(TreeCount(node->right, value));
+                    break;
                 case (int(TAN)) : return tan(TreeCount(node->right, value));
+                    break;
                 case (int(CTG)) : return 1 / (tan(TreeCount(node->right, value)));
+                    break;
                 case (int(LOG)) : return log(TreeCount(node->right, value));
+                    break;
             }
         }
+            break;
         case (ValueType::_unknown) : return value;
     }
-
+    return value;
 }
 Node* Diff (const Node *tree) {
     switch (tree->Type) {
@@ -584,4 +601,5 @@ Node* Diff (const Node *tree) {
             }
         }
     }
+    return nullptr;
 }
