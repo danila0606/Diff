@@ -189,13 +189,14 @@ bool my_isdigit(istringstream &str, double &digit) {
                 str.ignore(1);
             } else {
                 digit_str[i] = '\0';
-                digit = (double)strtol(digit_str, NULL, Notation);
+                digit = atoi(digit_str);
+               // digit = (double)strtol(digit_str, NULL, Notation);
                 return true;
             }
         }
         digit_str[i] = '\0';
-
-        digit = (double)strtol(digit_str, NULL, Notation);
+        digit = atoi(digit_str);
+        //digit = (double)strtol(digit_str, NULL, Notation);
         return true;
     }
     else
